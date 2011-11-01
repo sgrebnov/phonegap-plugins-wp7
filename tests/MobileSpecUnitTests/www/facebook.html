@@ -37,7 +37,7 @@
             }, false);
             window.setTimeout(function () {
                 if (!deviceReady) {
-                    alert("Error: PhoneGap did not initialize.  Demo will not run correctly.");
+                    console.log("Error: PhoneGap did not initialize.  Demo will not run correctly.");
                 }
             }, 1000);
         }
@@ -51,115 +51,97 @@
 		<button onclick="getSession()">Get session</button>
 		<button onclick="getLoginStatus()">Get login</button>
 		<button onclick="logout()">Logout</button>
-        <button onclick="FacebookInit()">Facebook init</button>
-        <button onclick="FacebookLogin()">Facebook login</button>
-        <button onclick="childTest()">Child browser test</button>
-        <a href="index.html" class="backBtn">Back</a>
-        <div id="data">loading ...</div>
 
+        <div id="data">loading ...</div>
+        
 		<script>
 
-            if (typeof PhoneGap == 'undefined') alert('PhoneGap variable does not exist. Check that you have included phonegap.js correctly');
-            if (typeof PG == 'undefined') alert('PG variable does not exist. Check that you have included pg-plugin-fb-connect.js correctly');
-            if (typeof FB == 'undefined') alert('FB variable does not exist. Check that you have included the Facebook JS SDK file.');
+		    if (typeof PhoneGap == 'undefined') console.log('PhoneGap variable does not exist. Check that you have included phonegap.js correctly');
+		    if (typeof PG == 'undefined') console.log('PG variable does not exist. Check that you have included pg-plugin-fb-connect.js correctly');
+		    if (typeof FB == 'undefined') console.log('FB variable does not exist. Check that you have included the Facebook JS SDK file.');
 
-            FB.Event.subscribe('auth.login', function(response) {
-                alert('auth.login event');
-            });
-            
-            FB.Event.subscribe('auth.logout', function(response) {
-                alert('auth.logout event');
-            });
-            
-            FB.Event.subscribe('auth.sessionChange', function(response) {
-                alert('auth.sessionChange event');
-            });
-            
-            FB.Event.subscribe('auth.statusChange', function(response) {
-                alert('auth.statusChange event');
-            });
-            
-            function getSession() {
-                alert(JSON.stringify(FB.getSession()));
-            }
-            
-            function getLoginStatus() {
-                FB.getLoginStatus(function(response) {
-                    if (response.session) {
-                        alert('logged in');
-                    } else {
-                        alert('not logged in');
-                    }
-                });
-            }
-            
-            function me() {
-                FB.api('/me/friends', function(response) {
-                	if (response.error) {
-                    	alert(JSON.stringify(response.error));
-                	} else {
-	                    var data = document.getElementById('data');
-	                    response.data.forEach(function(item) {
-	                        var d = document.createElement('div');
-	                        d.innerHTML = item.name;
-	                        data.appendChild(d);
-	                    });
-                	}
-                });
-            }
-            
-            function logout() {
-                FB.logout(function(response) {
-                    alert('logged out');
-                });
-            }            
+		    FB.Event.subscribe('auth.login', function (response) {
+		        console.log('auth.login event');
+		    });
 
-            function login() {
-                FB.login(
-                    function(response) {
+		    FB.Event.subscribe('auth.logout', function (response) {
+		        console.log('auth.logout event');
+		    });
+
+		    FB.Event.subscribe('auth.sessionChange', function (response) {
+		        console.log('auth.sessionChange event');
+		    });
+
+		    FB.Event.subscribe('auth.statusChange', function (response) {
+		        console.log('auth.statusChange event');
+		    });
+
+		    function getSession() {
+		        var session = FB.getSession();
+		        if (session == null) {
+		            console.log("session is null");
+		        }
+		        else {
+		            console.log(JSON.stringify(session));
+                }
+		    }
+
+		    function getLoginStatus() {
+		        FB.getLoginStatus(function (response) {
+		            if (response.session) {
+		                console.log('logged in');
+		            } else {
+		                console.log('not logged in');
+		            }
+		        });
+		    }
+
+		    function me() {
+		        FB.api('/me/friends', function (response) {
+		            if (response.error) {
+		                console.log(JSON.stringify(response.error));
+		            } else {
+		                var data = document.getElementById('data');
+		                response.data.forEach(function (item) {
+		                    var d = document.createElement('div');
+		                    d.innerHTML = item.name;
+		                    data.appendChild(d);
+		                });
+		            }
+		        });
+		    }
+
+		    function logout() {
+		        FB.logout(function (response) {
+		            console.log('logged out');
+		        });
+		    }
+
+		    function login() {
+		        FB.login(
+                    function (response) {
                         if (response.session) {
-                            alert('logged in');
+                            console.log('logged in');
                         } else {
-                            alert('not logged in');
+                            console.log('not logged in');
                         }
                     },
                     { perms: "email" }
                 );
-            }
-            
-            document.addEventListener('deviceready', function() {
-                try {
-                    alert('Device is ready! Make sure you set your app_id below this alert.');
-                    FB.init({ appId: "app_id", nativeInterface: PG.FB });
-                    document.getElementById('data').innerHTML = "";
-                } catch (e) {
-                    alert(e);
-                }
-            }, false);
+		    }
 
-            function FacebookInit() {
-                console.log("Facebook init");
-                PhoneGap.exec(null, null, 'FacebookConnect', 'init', { apiKey: '12345' });
-            }
-
-
-            function FacebookLogin() {
-                console.log("Facebook Login");
-                PhoneGap.exec(null, null, 'FacebookConnect', 'login', {});
-            }
-
-            function childTest() {
-                console.log("child test start");
-                if (window.plugins.childBrowser == null) {
-                    ChildBrowser.install();
-                }
-                window.plugins.childBrowser.onLocationChange = function (loc) { console.log("onLocationChanged start..."); };
-                window.plugins.childBrowser.showWebPage("http://www.google.com");
-                window.plugins.childBrowser.onLocationChange = function (loc) { console.log("onLocationChanged start..."); };
-                console.log("child test end");
-            }
-
-
+		    document.addEventListener('deviceready', function () {
+		        try {
+		            //alert('Device is ready! Make sure you set your app_id below this alert.');
+		            console.log('Device is ready! Make sure you set your app_id below this alert.');
+		            FB.init({ appId: "311961255484993", cookie: true, logging: true, nativeInterface: PG.FB });
+		            //FB.init({ appId: "311961255484993"});
+		            document.getElementById('data').innerHTML = "";
+		        } catch (e) {
+		            //alert(e);
+		            console.log("Init error: " + e);
+		        }
+		    }, false);
         </script>
         <div id="log"></div>
 	</body>
