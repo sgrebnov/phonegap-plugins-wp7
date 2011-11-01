@@ -105,8 +105,8 @@
     <Content Include="www\autotest\test-runner.js" />
     <Content Include="www\autotest\tests\pg-plugin-fb-connect-tests.js" />
     <Content Include="www\ChildBrowser.js" />
-    <Content Include="www\facebookIphone.html" />
-    <Content Include="www\facebook.html" />
+    <Content Include="www\facebook1.html" />
+    <Content Include="www\facebook2.html" />
     <Content Include="www\facebook_js_sdk.js" />
     <Content Include="www\FBConnect.js" />
     <Content Include="www\index.html" />
