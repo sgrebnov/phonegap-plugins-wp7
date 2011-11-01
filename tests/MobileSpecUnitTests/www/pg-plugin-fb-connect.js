@@ -1,4 +1,8 @@
-// TODO perm support, error handling
+/* MIT licensed */
+// (c) 2011 Dave Johnson, Nitobi
+// (c) 2011 Sergey Grebnov
+// based on https://github.com/davejohnson/phonegap-plugin-facebook-connect/blob/master/www/pg-plugin-fb-connect.js
+// and FBConnect.js (c) 2010 Jesse MacFadyen, Nitobi
 
 PG = ( typeof PG == 'undefined' ? {} : PG );
 PG.FB = {
@@ -12,33 +16,34 @@ PG.FB = {
             document.body.appendChild(elem);
         }
 
-        FB.fbConnect = FBConnect.install();
-        FB.fbConnect.apiKey = apiKey;
+        // initializes connection module
+        FB.fbConnect = FBConnect.install(apiKey, "http://www.facebook.com/connect/login_success.html", "touch");
+        FB.fbConnect.restoreLastSession();
 
-        var session = JSON.parse(localStorage.getItem('pg_fb_session') || '{"expires":0}');
-        console.log(JSON.stringify(session));
+        var session = FB.fbConnect.session;
+
         if (session && session.expires > new Date().valueOf()) {
             FB.Auth.setSession(session, 'connected');
-            FB.fbConnect.session = session;
         }
     },
     login: function (a, b) {
         console.log("fb-connect login");
 
-        b = b || { perms: '' };
+        FB.fbConnect.connect(b.scope);
 
-        FB.fbConnect.connect(FB.fbConnect.apiKey, "http://www.facebook.com/connect/login_success.html");
         FB.fbConnect.onConnect = function (e) {
-            localStorage.setItem('pg_fb_session', JSON.stringify(e.session));
+            FB.fbConnect.saveSession();
             FB.Auth.setSession(FB.fbConnect.session, 'connected');
             if (a) a(e);
         }
     },
     logout: function (cb) {
         console.log("fb-connect logout");
-        FB.fbConnect.logout("http://www.facebook.com/connect/login_success.html");
+
+        FB.fbConnect.logout();
+
         FB.fbConnect.onDisconnect = function (e) {
-            localStorage.removeItem('pg_fb_session');
+            FB.fbConnect.saveSession();
             FB.Auth.setSession(null, 'notConnected');
             if (cb) cb(e);
         }
@@ -57,8 +62,16 @@ PG.FB = {
     }
 };
 
-function FBConnect() {
+/**
+ * FBConnect implements user authentication logic and session information store
+ */
 
+function FBConnect(client_id, redirect_uri, display) {
+
+    this.client_id = client_id;
+    this.redirect_uri = redirect_uri;
+    this.display = display;
+        
     this.resetSession();
 
     if (window.plugins.childBrowser == null) {
@@ -67,33 +80,28 @@ function FBConnect() {
 
 }
 
-FBConnect.prototype.resetSession = function () {
-    this.status = "unknown";
-    this.session = {};
-    this.session.access_token = null;
-    this.session.expires = 0;
-    this.session.secret = null;
-    this.session.session_key = null;
-    this.session.sig = null;
-    this.session.uid = null;
-}
+/**
+* User login
+*/
+FBConnect.prototype.connect = function (scope) {
 
-FBConnect.prototype.connect = function (client_id, redirect_uri, display) {
-    this.client_id = client_id;
-    this.redirect_uri = redirect_uri;
-    
     var authorize_url = "https://graph.facebook.com/oauth/authorize?";
-    authorize_url += "client_id=" + client_id;
-    authorize_url += "&redirect_uri=" + redirect_uri;
-    authorize_url += "&display=" + (display ? display : "touch");
+    authorize_url += "client_id=" + this.client_id;
+    authorize_url += "&redirect_uri=" + this.redirect_uri;
+    authorize_url += "&display=" + (this.display ? this.display : "touch");
     authorize_url += "&type=user_agent";
+
+    // extended permissions http://developers.facebook.com/docs/reference/api/permissions/
+    if (scope) {
+        authorize_url += "&scope=" + scope;
+    }
 
     window.plugins.childBrowser.showWebPage(authorize_url);
     var self = this;
-    window.plugins.childBrowser.onLocationChange = function (loc) { self.onLocationChange(loc); };
+    window.plugins.childBrowser.onLocationChange = function (loc) { self.onLoginLocationChange(loc); };
 }
 
-FBConnect.prototype.onLocationChange = function (newLoc) {
+FBConnect.prototype.onLoginLocationChange = function (newLoc) {
     if (newLoc.indexOf(this.redirect_uri) == 0) {
         var result = unescape(newLoc).split("#")[1];
         result = unescape(result);
@@ -110,10 +118,12 @@ FBConnect.prototype.onLocationChange = function (newLoc) {
     }
 }
 
-FBConnect.prototype.logout = function (redirect_uri) {
-    this.redirect_uri = redirect_uri;
+/**
+* User logout
+*/
+FBConnect.prototype.logout = function () {
     var authorize_url = "https://www.facebook.com/logout.php?";
-    authorize_url += "&next=" + redirect_uri;
+    authorize_url += "&next=" + this.redirect_uri;
     authorize_url += "&access_token=" + this.session.access_token;
     console.log("logout url: " + authorize_url);
     window.plugins.childBrowser.showWebPage(authorize_url);
@@ -127,9 +137,11 @@ FBConnect.prototype.logout = function (redirect_uri) {
     };
 }
 
-
+/**
+* Example method - returns your friends
+*/
 FBConnect.prototype.getFriends = function () {
-    var url = "https://graph.facebook.com/me/friends?access_token=" + this.accessToken;
+    var url = "https://graph.facebook.com/me/friends?access_token=" + this.session.access_token;
     var req = new XMLHttpRequest();
 
     req.open("get", url, true);
@@ -140,10 +152,36 @@ FBConnect.prototype.getFriends = function () {
 
 // Note: this plugin does NOT install itself, call this method some time after deviceready to install it
 // it will be returned, and also available globally from window.plugins.fbConnect
-FBConnect.install = function () {
+FBConnect.install = function (client_id, redirect_uri, display) {
     if (!window.plugins) {
         window.plugins = {};
     }
-    window.plugins.fbConnect = new FBConnect();
+    window.plugins.fbConnect = new FBConnect(client_id, redirect_uri, display);
+
     return window.plugins.fbConnect;
+}
+
+/**
+* Session management functionality
+*/
+FBConnect.prototype.resetSession = function () {
+    this.status = "unknown";
+    this.session = {};
+    this.session.access_token = null;
+    this.session.expires = 0;
+    this.session.secret = null;
+    this.session.session_key = null;
+    this.session.sig = null;
+    this.session.uid = null;
+}
+
+FBConnect.prototype.restoreLastSession = function () {
+    var session = JSON.parse(localStorage.getItem('pg_fb_session'));
+    if (session) {
+        this.session = session;
+    }
+}
+
+FBConnect.prototype.saveSession = function () {
+    localStorage.setItem('pg_fb_session', JSON.stringify(this.session));
 }

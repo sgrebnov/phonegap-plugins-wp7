@@ -26,7 +26,7 @@ test('login', function loginToFacebook() {
             QUnit.start()
             ok(true, 'user can login')            
         }
-    }, { perms: "email read_stream publish_stream offline_access" })
+    }, { scope: 'email, read_stream, read_friendlists' })
 })
 
 test('get friends', function () {

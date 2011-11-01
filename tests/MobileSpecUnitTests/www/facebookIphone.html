@@ -112,16 +112,6 @@
 	
     <script type="text/javascript" charset="utf-8">
 
-
-        // If you want to prevent dragging, uncomment this section
-        /*
-        function preventBehavior(e) 
-        { 
-        e.preventDefault(); 
-        };
-        document.addEventListener("touchmove", preventBehavior, false);
-        */
-
         var client_id = "311961255484993";
         var redir_url = "http://www.facebook.com/connect/login_success.html";
         var friendsMap = {};
@@ -130,12 +120,11 @@
             document.addEventListener("deviceready", onDeviceReady, false);
         }
 
-
         /* When this function is called, PhoneGap has been initialized and is ready to roll */
         function onDeviceReady() {
             // do your thing!
-            var fb = FBConnect.install();
-            fb.connect(client_id, redir_url);
+            var fb = FBConnect.install(client_id, redir_url, "touch");
+            fb.connect('email, read_stream, read_friendlists');
             fb.onConnect = onFBConnected;
         }
 
@@ -166,8 +155,6 @@
             alert(friendsMap[id].name);
         }
 	
-	
-    
     </script>
   </head>
   <body onload="onBodyLoad()">

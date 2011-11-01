@@ -126,7 +126,7 @@
                             console.log('not logged in');
                         }
                     },
-                    { perms: "email" }
+                    { scope: 'email, read_stream, read_friendlists' }
                 );
 		    }
 
@@ -135,7 +135,6 @@
 		            //alert('Device is ready! Make sure you set your app_id below this alert.');
 		            console.log('Device is ready! Make sure you set your app_id below this alert.');
 		            FB.init({ appId: "311961255484993", nativeInterface: PG.FB });
-		            //FB.init({ appId: "311961255484993"});
 		            document.getElementById('data').innerHTML = "";
 		        } catch (e) {
 		            //alert(e);

@@ -97,13 +97,6 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="SplashScreenImage.jpg" />
-    <Content Include="www\accelerometer.html">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="www\accelerometer2.html" />
-    <Content Include="www\audio.html">
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="www\autotest\index.html">
       <SubType>Designer</SubType>
     </Content>
@@ -111,31 +104,16 @@
     <Content Include="www\autotest\qunit.js" />
     <Content Include="www\autotest\test-runner.js" />
     <Content Include="www\autotest\tests\pg-plugin-fb-connect-tests.js" />
-    <Content Include="www\calculator.html" />
-    <Content Include="www\camera.html" />
-    <Content Include="www\capture.html" />
     <Content Include="www\ChildBrowser.js" />
-    <Content Include="www\compass.html" />
-    <Content Include="www\contacts.html" />
     <Content Include="www\facebookIphone.html" />
-    <Content Include="www\events.html" />
     <Content Include="www\facebook.html" />
     <Content Include="www\facebook_js_sdk.js" />
     <Content Include="www\FBConnect.js" />
-    <Content Include="www\file.html" />
     <Content Include="www\index.html" />
-    <Content Include="www\location.html" />
     <Content Include="www\master.css" />
     <Content Include="www\misc\index.html" />
-    <Content Include="www\network.html" />
-    <Content Include="www\notification.html">
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="www\pg-plugin-fb-connect.js" />
     <Content Include="www\phonegap-1.1.0.js" />
-    <Content Include="www\storage.html">
-      <SubType>Designer</SubType>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\framework\WP7GapClassLib.csproj">
