@@ -66,6 +66,7 @@
     </Compile>
     <Compile Include="Calculator.cs" />
     <Compile Include="ChildBrowserCommand.cs" />
+    <Compile Include="LiveTiles.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -104,16 +105,40 @@
     <Content Include="www\autotest\qunit.js" />
     <Content Include="www\autotest\test-runner.js" />
     <Content Include="www\autotest\tests\pg-plugin-fb-connect-tests.js" />
-    <Content Include="www\ChildBrowser.js" />
-    <Content Include="www\facebook1.html" />
-    <Content Include="www\facebook2.html" />
-    <Content Include="www\facebook_js_sdk.js" />
-    <Content Include="www\FBConnect.js" />
-    <Content Include="www\index.html" />
-    <Content Include="www\master.css" />
+    <Content Include="www\ChildBrowser.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="www\facebook1.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="www\facebook2.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="www\facebook_js_sdk.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="www\FBConnect.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="www\index.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="www\liveTiles.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="www\liveTiles.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="www\master.css">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="www\misc\index.html" />
-    <Content Include="www\pg-plugin-fb-connect.js" />
-    <Content Include="www\phonegap-1.1.0.js" />
+    <Content Include="www\pg-plugin-fb-connect.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="www\phonegap-1.1.0.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\framework\WP7GapClassLib.csproj">

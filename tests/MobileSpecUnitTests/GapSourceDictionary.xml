@@ -7,6 +7,8 @@
     <FilePath Value="www\facebook_js_sdk.js"/>
     <FilePath Value="www\FBConnect.js"/>
     <FilePath Value="www\index.html"/>
+    <FilePath Value="www\liveTiles.html"/>
+    <FilePath Value="www\liveTiles.js"/>
     <FilePath Value="www\master.css"/>
     <FilePath Value="www\pg-plugin-fb-connect.js"/>
     <FilePath Value="www\phonegap-1.1.0.js"/>

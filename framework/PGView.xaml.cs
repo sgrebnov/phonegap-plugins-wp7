@@ -34,6 +34,7 @@ using Microsoft.Xna.Framework;
 using WP7GapClassLib.PhoneGap;
 using System.Threading;
 using Microsoft.Phone.Shell;
+using System.Windows.Navigation;
 
 
 
@@ -240,9 +241,22 @@ namespace WP7GapClassLib
                 // todo: this should be a start page param passed in via a getter/setter
                 // aka StartPage
 
-                Uri indexUri = new Uri("www/index.html", UriKind.Relative);
+                PhoneApplicationPage currentPage = ((PhoneApplicationFrame)Application.Current.RootVisual).Content as PhoneApplicationPage;
+                string appUri = string.Empty;
+                Uri indexUri;
+                if (currentPage.NavigationContext.QueryString.TryGetValue("Uri", out appUri))
+                {
+                    indexUri = new Uri(appUri, UriKind.Relative);
+                }
+                else
+                {
+                    indexUri = new Uri("www/index.html", UriKind.Relative);
+                }
                 this.GapBrowser.Navigate(indexUri);
 
+                //Uri indexUri = new Uri("www/index.html", UriKind.Relative);
+                //this.GapBrowser.Navigate(indexUri);
+                
                 this.IsBrowserInitialized = true;
 
                 AttachHardwareButtonHandlers();
