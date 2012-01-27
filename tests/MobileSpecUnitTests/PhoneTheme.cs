@@ -54,12 +54,12 @@ namespace PhoneGap.Extension.Commands
                     {
                         PhoneThemeInfo themeInfo = new PhoneThemeInfo();
 
-                        themeInfo.BackgroundColor = ((Color)Application.Current.Resources["PhoneBackgroundColor"]).ToString();
+                        themeInfo.BackgroundColor = this.ColorToHtmlHex((Color)Application.Current.Resources["PhoneBackgroundColor"]);
 
                         themeInfo.IsLight = (Visibility)Application.Current.Resources["PhoneLightThemeVisibility"] == Visibility.Visible;
                         themeInfo.IsDark = (Visibility)Application.Current.Resources["PhoneDarkThemeVisibility"] == Visibility.Visible;
 
-                        themeInfo.AccentColor = ((Color)Application.Current.Resources["PhoneAccentColor"]).ToString();
+                        themeInfo.AccentColor = this.ColorToHtmlHex((Color)Application.Current.Resources["PhoneAccentColor"]);
 
                         DispatchCommandResult(new PluginResult(PluginResult.Status.OK, themeInfo));
                     }
@@ -74,7 +74,15 @@ namespace PhoneGap.Extension.Commands
             {
                 DispatchCommandResult(new PluginResult(PluginResult.Status.ERROR, "Error updating application tile"));
             }
-        }       
+        }
+
+        string ColorToHtmlHex(Color color)
+        { 
+            return String.Format("#{0:X2}{1:X2}{2:X2}", 
+                color.R,
+                color.G,
+                color.B);
+        }
 
     }
 }

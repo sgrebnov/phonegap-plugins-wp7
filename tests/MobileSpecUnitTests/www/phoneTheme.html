@@ -53,7 +53,14 @@
         var success = function (res) {
             console.log('theme info is retrieved');
             document.getElementById('backgroundColor').value = res.backgroundColor;
+            document.getElementById('backgroundColor').style.backgroundColor = res.backgroundColor;
+
+            if (res.isDark === true) {
+                document.getElementById('backgroundColor').style.color = '#FFFFFF';
+            }
+
             document.getElementById('accentColor').value = res.accentColor;
+            document.getElementById('accentColor').style.backgroundColor = res.accentColor;
         };
 
         var fail = function (e) {
