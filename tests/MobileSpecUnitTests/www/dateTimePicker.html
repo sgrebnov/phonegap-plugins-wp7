@@ -35,7 +35,7 @@
         document.addEventListener("deviceready", function () {
             deviceReady = true;
             console.log("Device=" + device.platform + " " + device.version);
-            document.getElementById('res').innerHTML = new Date().toGMTString();
+            document.getElementById('res').innerHTML = new Date().toLocaleString();
         }, false);
         window.setTimeout(function () {
             if (!deviceReady) {
@@ -44,20 +44,24 @@
         }, 1000);
     }
 
+    function selectedDateTime() {
+        return new Date(document.getElementById('res').innerHTML);
+    }
+
     function selectDate() {
         console.log('selectDate');
 
         var success = function (res) {
             console.log('selectDate success');
 
-            document.getElementById('res').innerHTML = res.toGMTString();
+            document.getElementById('res').innerHTML = res.toLocaleString();
         };
 
         var fail = function (e) {
             console.log("Error occurred: " + e);
             document.getElementById('res').innerHTML = "Error occurred: " + e;
         };
-        navigator.plugins.dateTimePicker.selectDate(success, fail, { value: new Date() });
+        navigator.plugins.dateTimePicker.selectDate(success, fail, { value: selectedDateTime() });
     };
 
     function selectTime() {
@@ -66,14 +70,14 @@
         var success = function (res) {
             console.log('selectTime success');
 
-            document.getElementById('res').innerHTML = res.toGMTString();
+            document.getElementById('res').innerHTML = res.toLocaleString();
         };
 
         var fail = function (e) {
             console.log("Error occurred: " + e);
             document.getElementById('res').innerHTML = "Error occurred: " + e;
         };
-        navigator.plugins.dateTimePicker.selectTime(success, fail, { value: new Date() });
+        navigator.plugins.dateTimePicker.selectTime(success, fail, { value: selectedDateTime() });
     };    
 
 </script>
@@ -81,10 +85,10 @@
   </head>
   <body onLoad="init();" id="stage" class="theme">
   
-    <h1>Live tile</h1>
+    <h1>Datetime Picker</h1>
     <div id="info">        
         <b>Selected date and time:</b> 
-        </br>
+        <br/>
         <span id="res"></span><br/>        
     </div>
     <h2>Actions</h2>

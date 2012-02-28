@@ -92,12 +92,11 @@ namespace PhoneGap.Extension.Commands
                     return;
                 }
 
-
                 this.dateTimePickerTask = new DateTimePickerTask();
                 dateTimePickerTask.Value = dateTimePickerOptions.Value;
 
                 dateTimePickerTask.Completed += this.dateTimePickerTask_Completed;
-                dateTimePickerTask.Show();
+                dateTimePickerTask.Show(DateTimePickerTask.DateTimePickerType.Date);
             }
             catch (Exception e)
             {
@@ -125,13 +124,11 @@ namespace PhoneGap.Extension.Commands
                     return;
                 }
 
-                throw new NotImplementedException("Not implemented yet");
+                this.dateTimePickerTask = new DateTimePickerTask();
+                dateTimePickerTask.Value = dateTimePickerOptions.Value;
 
-                //this.dateTimePickerTask = new DateTimePickerTask();
-                //dateTimePickerTask.Value = dateTimePickerOptions.Value;
-
-                //dateTimePickerTask.Completed += this.dateTimePickerTask_Completed;
-                //dateTimePickerTask.Show();
+                dateTimePickerTask.Completed += this.dateTimePickerTask_Completed;
+                dateTimePickerTask.Show(DateTimePickerTask.DateTimePickerType.Time);
             }
             catch (Exception e)
             {

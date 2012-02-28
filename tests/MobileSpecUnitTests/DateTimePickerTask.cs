@@ -29,6 +29,21 @@ namespace PhoneGap.Extension.Commands
     public class DateTimePickerTask
     {
         /// <summary>
+        /// Picker type - date or time
+        /// </summary>
+        public enum DateTimePickerType
+        {
+            /// <summary>
+            /// Date picker 
+            /// </summary>
+            Date = 0,
+            ///
+            /// Time picker
+            /// 
+            Time = 1
+        }
+        
+        /// <summary>
         /// Represents date/time information returned from a call to the Show method of
         /// a PhoneGap.Extension.Commands.DateTimePickerTask object
         /// </summary>
@@ -69,8 +84,6 @@ namespace PhoneGap.Extension.Commands
         private NavigationOutTransition _savedNavigationOutTransition;
         private IDateTimePickerPage _dateTimePickerPage;
 
-        private Uri PickerPageUri = new System.Uri("/Microsoft.Phone.Controls.Toolkit;component/DateTimePickers/DatePickerPage.xaml?dummy=" + Guid.NewGuid().ToString(), UriKind.Relative);
-
         #endregion
 
         #region Pulbic properties
@@ -82,31 +95,25 @@ namespace PhoneGap.Extension.Commands
         /// <summary>
         /// Shows Audio Recording application
         /// </summary>
-        public void Show()
+        public void Show(DateTimePickerType type)
         {
             Deployment.Current.Dispatcher.BeginInvoke(() =>
             {
-                var root = Application.Current.RootVisual as PhoneApplicationFrame;
-
-                //root.Navigated += new System.Windows.Navigation.NavigatedEventHandler(NavigationService_Navigated);
-                //MethodInfo dynMethod = this.GetType().GetMethod("OpenPickerPage", BindingFlags.NonPublic | BindingFlags.Instance);
-                //dynMethod.Invoke(this, null);
-
-                OpenPickerPage();
-                // dummy parameter is used to always open a fresh version
-                //root.Navigate(new System.Uri("/Microsoft.Phone.Controls.Toolkit;component/DateTimePickers/DatePickerPage.xaml?dummy=" + Guid.NewGuid().ToString(), UriKind.Relative));
+                OpenPickerPage(type);
             });
         }
 
         /// <summary>
         /// Opens the page to select the date or time value
         /// </summary>
-        private void OpenPickerPage()
+        private void OpenPickerPage(DateTimePickerType type)
         {
-            if (null == PickerPageUri)
-            {
-                throw new ArgumentException("PickerPageUri property must not be null.");
-            }
+
+
+            string pickerPageName = type == DateTimePickerType.Date ? "DatePickerPage.xaml" : "TimePickerPage.xaml";
+
+            Uri pickerPageUri = new System.Uri("/Microsoft.Phone.Controls.Toolkit;component/DateTimePickers/" + 
+                pickerPageName + "?dummy=" + Guid.NewGuid().ToString(), UriKind.Relative);
 
             if (null == _frame)
             {
@@ -130,7 +137,7 @@ namespace PhoneGap.Extension.Commands
                     _frame.NavigationStopped += OnFrameNavigationStoppedOrFailed;
                     _frame.NavigationFailed += OnFrameNavigationStoppedOrFailed;
 
-                    _frame.Navigate(PickerPageUri);
+                    _frame.Navigate(pickerPageUri);
                 }
             }
 
