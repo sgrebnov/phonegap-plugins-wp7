@@ -2,6 +2,8 @@
 <!-- This file is auto-generated, do not edit! -jm -->
 <GapSourceDictionary>
     <FilePath Value="www\ChildBrowser.js"/>
+    <FilePath Value="www\dateTimePicker.html"/>
+    <FilePath Value="www\dateTimePicker.js"/>
     <FilePath Value="www\facebook1.html"/>
     <FilePath Value="www\facebook2.html"/>
     <FilePath Value="www\facebook_js_sdk.js"/>
